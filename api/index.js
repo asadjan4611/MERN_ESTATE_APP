@@ -3,26 +3,34 @@ const express = require("express");
 const dotenv = require("dotenv");
 const  authRouter = require('./routes/authRoute');
 const  testrouter = require('./routes/user.routes');
+const  {createListeningRouter} = require('./routes/createListening');
+const  {imageController} = require('./controller/imageController');
 const cors  = require('cors');
 const cookieParser = require('cookie-parser');
 dotenv.config();
-
+ 
+const app = express();
 
 mongoose.connect(process.env.MONGO).then(()=>{
     console.log("Successfull connected");
 });
-
-const app = express();
-app.use(cors());
+app.use(cookieParser());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true, // (Optional, if using cookies/auth)
+    origin: 'http://localhost:5173',
+    credentials: true, // (Optional, if using cookies/auth)
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: true }));
 app.use('/test',testrouter);
+app.use('/test',createListeningRouter);
 app.use('/auth',authRouter)
+app.use('/image',imageController)
 
 
 app.use((err, req, res, next) => {

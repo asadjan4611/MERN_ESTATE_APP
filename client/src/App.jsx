@@ -5,6 +5,7 @@ import About from './pages/About';
 import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import CreateListening from './pages/createListening';
 import Header from './components/Header';
 import PrivateRoute from './components/privateRoute'; // Fixed import name
 
@@ -19,6 +20,8 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
               <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/createListening" element={<CreateListening />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

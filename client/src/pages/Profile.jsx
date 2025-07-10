@@ -2,17 +2,33 @@ import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Your Firebase config
-import {updateUserStart,updateUserSuccessfully,updateUserFailure} from '../redux/user/userSlice.js'
+import {
+  updateUserStart,
+  updateUserSuccessfully,
+  updateUserFailure,
+  deleteUserFailure,
+  deleteUserSuccess,
+  deleteUserStart,
+  signOutUserStart,
+      signOutUserSuccess,
+      signOutUserFailure,
+
+} from '../redux/user/userSlice.js'
 import { useDispatch } from 'react-redux';
+import { useNavigate,Link } from 'react-router-dom';
+
+
 export default function Profile() {
   const { currentUser,loading,error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
+  const navigate= useNavigate();
   const [file, setFile] = useState(null);
   const [updateUser, setUpdateuser] = useState(null);
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [formData, setFormData] = useState({});
   const dispath =useDispatch();
   console.log(formData);
+
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
@@ -79,6 +95,47 @@ export default function Profile() {
    const handleChange =  (e) =>{
     setFormData({...formData,[e.target.id]:e.target.value});
    }
+
+ const handleDelte  = async() =>{
+  try {
+    dispath(deleteUserStart());
+    const resp = await fetch(`http://localhost:3000/test/delete/${currentUser._id}`,
+     {
+      method:"DELETE"
+     }
+    );
+     const data = resp.json();
+     if(data.success === false){
+       dispath(deleteUserFailure(data.message));
+       return;
+    }
+     dispath(deleteUserSuccess(data))
+
+  } catch (error) {
+    dispath(deleteUserFailure(error.message));
+  }
+ }
+
+const handleSignOut = async (e) => {
+  e.preventDefault();
+  try {
+    dispath(signOutUserStart()); // Corrected typo: dispath → dispatch
+    
+    const res = await fetch('http://localhost:3000/auth/signout', {
+      credentials: 'include' // Required for cookie clearance
+    });
+    
+
+    dispath(signOutUserSuccess());
+   
+    navigate("/");
+    // Full page reload (clears all state)
+    
+  } catch (error) {
+    dispath(signOutUserFailure(error.message));
+  }
+};
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -96,7 +153,6 @@ export default function Profile() {
             <img 
               onClick={() => fileRef.current.click()}
               src={currentUser.avatar}
-              alt='profile'
               className='rounded-full h-24 w-24 object-cover cursor-pointer mt-1'
             />
           )}
@@ -141,8 +197,8 @@ export default function Profile() {
           {loading ?"Loading...." :"Update"}
         </button>
         <div className='flex justify-between mt-1 text-red-600'>
-          <span className='cursor-pointer'>Delete account</span>
-          <span className='cursor-pointer'>Sign out</span>
+          <span onClick={handleDelte} className='hover:underline cursor-pointer'>Delete account</span>
+          <span onClick={handleSignOut}  className='cursor-pointer'>Sign out</span>
         </div>
         <p className='text-red-700 text-center text-[2pxl] uppercase'>{error?error:""}</p>
          <p className='text-green-700 text-center text-[2pxl] uppercase'>{updateUser?"User updated successflly":""}</p>

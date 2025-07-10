@@ -29,7 +29,7 @@ export default function SignUp() {
       });
       const data = await res.json();
       console.log(data);
-     navigate('/SignIn');
+     navigate('/sign-in');
      if(data.success === false){
       setLoading(false)
       setError(data.message) 
@@ -77,7 +77,7 @@ export default function SignUp() {
       </form>
       <div className="flex gap-3 mt-3">
         <p>Have an account?</p>
-        <Link to="/signin">
+        <Link to="/sign-in">
           <span className="text-blue-700 hover:underline">Sign in</span>
         </Link>
       </div>

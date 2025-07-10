@@ -22,14 +22,17 @@ export default function SignIn() {
     try {
       dispatch(signInStart());
       
-      const res = await fetch('http://localhost:3000/auth/signin', {
+      const res = await fetch(
+        'http://localhost:3000/auth/signin',
+        
+        {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+         credentials : "include",
       });
-      
       const data = await res.json();
       
       if (data.success === false) {
@@ -37,7 +40,7 @@ export default function SignIn() {
         return;
       }
       
-      dispatch(signInSuccess(data));
+      dispatch(signInSuccess(data.user));
       navigate('/');
       
     } catch (error) {
@@ -75,7 +78,7 @@ export default function SignIn() {
       </form>
       <div className="flex gap-3 mt-3">
         <p>Don't have an account?</p>
-        <Link to="/SignUp">
+        <Link to="/sign-up">
           <span className="text-blue-700 hover:underline">Sign up</span>
         </Link>
       </div>

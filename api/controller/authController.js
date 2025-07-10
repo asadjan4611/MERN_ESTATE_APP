@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const { errorHandler } = require('../utilis/arrow.js');
 dotenv.config();
 const jwt = require('jsonwebtoken');
+
  const authController = async (req, res,next) => {
    
         
@@ -60,8 +61,9 @@ const jwt = require('jsonwebtoken');
     res
       .cookie("access-token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // HTTPS in production
-        sameSite: "strict", // Prevent CSRF
+        secure:false,
+       // secure: process.env.NODE_ENV === "production", // HTTPS in production
+        sameSite: "none", // Prevent CSRF
       })
       .status(200)
       .json({
@@ -69,7 +71,7 @@ const jwt = require('jsonwebtoken');
         user: {
           _id: user._id,
           email: user.email,
-          // Add other safe fields (avoid sending password)
+          username:user.username
         },
       }
     );
@@ -129,5 +131,15 @@ const  googleContoller= async(req,res,next) =>{
             next(errorHandler(500, "Google authentication failed: " + error.message)); 
           }
 }
+const authSignOutController = async (req, res, next) => {
+   console.log("logout ")
+  try {
+    res.clearCookie('access_token')
+    .status(200).json("user  signout");
+       console.log("user signout successfully");
+  } catch (error) {
+    return next(errorHandler(error.message));
+  }
+};
 
-module.exports ={authController,authSignInController,googleContoller}
+module.exports ={authController,authSignInController,googleContoller,authSignOutController}

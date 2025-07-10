@@ -9,9 +9,9 @@ const test = (req, res) => {
 };
 
 const update = async(req, res,next) => {
-  // if (req.user.id !== req.params.id) {
-  //   return next(errorHandler(400,'you can update only your account'))
-  // }
+  if (req.user.id !== req.params.id) {
+    return next(errorHandler(400,'you can update only your account'))
+  }
 
   try {
     if (req.body.password) {
@@ -44,4 +44,23 @@ const update = async(req, res,next) => {
   }
 };
 
-module.exports = { test ,update};  // CommonJS export
+const deleteUser = async(req, res,next) => {
+  if (req.user.id !== req.params.id) {
+    return next(errorHandler(400,'you can update only your account'))
+  }
+   
+  try {
+    await usermodel.findOneAndDelete(req.params.id);
+    res.clearCookie('access_token')
+       .status(200)
+       .json({ success: true, message: 'User deleted successfully' });
+    res.status(200).json("User deleletd successfully");
+ 
+  } catch (error) {
+    return next(errorHandler(500,error.message))
+  }
+  
+  
+};
+
+module.exports = { test ,update,deleteUser};  // CommonJS export
