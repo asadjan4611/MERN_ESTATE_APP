@@ -15,6 +15,10 @@ const ListeningModel  = mongoose.Schema(
          type:String,
          required:true
         },
+        type:{
+            type:String,
+            required:true
+        },
          regularPrice:{
          type:Number,
          required:true
@@ -37,10 +41,6 @@ const ListeningModel  = mongoose.Schema(
         },
         parking :{
             type:Boolean,
-            required:true
-        },
-        type:{
-            type:String,
             required:true
         },
         offer :{
