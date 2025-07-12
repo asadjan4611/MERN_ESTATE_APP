@@ -33,6 +33,7 @@ const jwt = require('jsonwebtoken');
         } catch (error) {
             next(error)
         }};
+
  const authSignInController = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -59,11 +60,11 @@ const jwt = require('jsonwebtoken');
   console.log(token);
    // 4. Set cookie and send response
     res
-      .cookie("access-token", token, {
+      .cookie("access_token", token, {
         httpOnly: true,
         secure:false,
        // secure: process.env.NODE_ENV === "production", // HTTPS in production
-        sameSite: "none", // Prevent CSRF
+        sameSite: "lax", // Prevent CSRF
       })
       .status(200)
       .json({
@@ -80,6 +81,7 @@ const jwt = require('jsonwebtoken');
   }
 };
 
+
 const  googleContoller= async(req,res,next) =>{
           try {
             const user = await UserModel.findOne({ email :req.body.email });
@@ -92,7 +94,7 @@ const  googleContoller= async(req,res,next) =>{
   const { password: pass, ...rest } = user._doc;
    // 4. Set cookie and send response
     res
-      .cookie("access-token", token, {
+      .cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // HTTPS in production
         sameSite: "strict", // Prevent CSRF
@@ -118,7 +120,7 @@ const  googleContoller= async(req,res,next) =>{
   console.log(token);
    // 4. Set cookie and send response
     res
-      .cookie("access-token", token, {
+      .cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // HTTPS in production
         sameSite: "strict", // Prevent CSRF
@@ -131,6 +133,7 @@ const  googleContoller= async(req,res,next) =>{
             next(errorHandler(500, "Google authentication failed: " + error.message)); 
           }
 }
+
 const authSignOutController = async (req, res, next) => {
    console.log("logout ")
   try {

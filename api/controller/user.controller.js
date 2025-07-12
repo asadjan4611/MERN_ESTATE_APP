@@ -1,3 +1,5 @@
+
+const listeningModel = require("../model/listeningModel");
 const usermodel = require("../model/usermodel");
 const { errorHandler } = require("../utilis/arrow");
 const bcrypt = require('bcrypt');
@@ -9,6 +11,7 @@ const test = (req, res) => {
 };
 
 const update = async(req, res,next) => {
+ 
   if (req.user.id !== req.params.id) {
     return next(errorHandler(400,'you can update only your account'))
   }
@@ -18,6 +21,7 @@ const update = async(req, res,next) => {
       req.body.password =await  bcrypt.hash(req.body.password,10);
     }
 
+   
    
     const updatedUser = await usermodel.findByIdAndUpdate(
        req.params.id,
@@ -30,15 +34,18 @@ const update = async(req, res,next) => {
         }
       },{new:true}
     );
+  
 
     if(!updatedUser){
       return next(errorHandler(400,'user that is udated is not found '))
     }
 
-    
+  
+     
     const {password, ...rest} = updatedUser._doc;
     res.status(200).json(rest);
-
+  
+   
   } catch (error) {
      return next(errorHandler(500,error.message)) 
   }
@@ -63,4 +70,7 @@ const deleteUser = async(req, res,next) => {
   
 };
 
-module.exports = { test ,update,deleteUser};  // CommonJS export
+
+
+
+module.exports = { test ,update,deleteUser };  // CommonJS export

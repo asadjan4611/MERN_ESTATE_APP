@@ -8,13 +8,12 @@ const  {imageController} = require('./controller/imageController');
 const cors  = require('cors');
 const cookieParser = require('cookie-parser');
 dotenv.config();
- 
+const {getListeningRoute} = require('./routes/getListeningRoute');
 const app = express();
 
 mongoose.connect(process.env.MONGO).then(()=>{
     console.log("Successfull connected");
 });
-app.use(cookieParser());
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -25,10 +24,10 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 
-//app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
+
 app.use('/test',testrouter);
 app.use('/test',createListeningRouter);
+app.use('/test',getListeningRoute);
 app.use('/auth',authRouter)
 app.use('/image',imageController)
 

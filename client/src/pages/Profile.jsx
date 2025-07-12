@@ -24,10 +24,13 @@ export default function Profile() {
   const navigate= useNavigate();
   const [file, setFile] = useState(null);
   const [updateUser, setUpdateuser] = useState(null);
+  const [listeningData,setListeningData]   = useState([]);
+  const [showlisteningerror, setShowlisteningerror] = useState(null);
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [formData, setFormData] = useState({});
   const dispath =useDispatch();
   console.log(formData);
+  console.log(listeningData.length);
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -61,14 +64,12 @@ export default function Profile() {
     dispath(updateUserStart());
     const res =  await fetch(`http://localhost:3000/test/update/${currentUser._id}`,{
      method:"POST",
+     credentials:"include",
       headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
-
-    
-
-    });
+        body: JSON.stringify(formData)
+       });
     const data =await  res.json();
 
     if(data.success === false){
@@ -136,6 +137,61 @@ const handleSignOut = async (e) => {
   }
 };
 
+
+const handleshowListening = async () =>{
+   try {
+    setShowlisteningerror(null)
+    const res = await fetch(`http://localhost:3000/test/listening/${currentUser._id}`
+      ,{
+      method:"GET",
+     credentials:"include",
+      headers: {
+          'Content-Type': 'application/json',
+        },
+    }
+      
+    );
+
+      const data = await  res.json();
+      if (data.success === false) {
+        setShowlisteningerror(data.message);
+        return;
+      }
+      setListeningData(data);
+   } catch (error) {
+    setShowlisteningerror(error.message);
+   }
+}
+
+const handleDelteListening =async(e) =>{
+  console.log("hi")
+  try {
+    const res = await fetch(`http://localhost:3000/test/deleteListening/${e}`,
+    {
+    method:"DELETE",
+    credentials:'include',
+    headers :{
+       'Content-Type': 'application/json',
+    }
+    }
+      );
+  console.log("hi 2")
+      
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return ;
+      }
+
+      setListeningData((prev)=>prev.filter((listening)=>listening._id !== e ));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+ const handleUpdateListening = async (e) =>{
+  
+ }
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -196,13 +252,63 @@ const handleSignOut = async (e) => {
         >
           {loading ?"Loading...." :"Update"}
         </button>
+        </form>
         <div className='flex justify-between mt-1 text-red-600'>
-          <span onClick={handleDelte} className='hover:underline cursor-pointer'>Delete account</span>
-          <span onClick={handleSignOut}  className='cursor-pointer'>Sign out</span>
+          <span onClick={handleDelte} className='hover:underline mt-3 cursor-pointer'>Delete account</span>
+          <span onClick={handleSignOut}  className='cursor-pointer mt-3'>Sign out</span>
         </div>
-        <p className='text-red-700 text-center text-[2pxl] uppercase'>{error?error:""}</p>
-         <p className='text-green-700 text-center text-[2pxl] uppercase'>{updateUser?"User updated successflly":""}</p>
-      </form>
+        <p className='text-red-700 mt-2 text-center text-[2pxl] uppercase'>{error?error:""}</p>
+         <p className='text-green-700 mt-2 text-center text-[2pxl] uppercase'>{updateUser?"User updated successflly":""}</p>
+         <button onClick={handleshowListening} className=' cursor-pointer uppercase text-green-600 mt-3 w-full hover:underline'>show listening</button>
+         <p className='text-red-500'>{showlisteningerror ? {showlisteningerror} : ""}</p>
+         <div>
+        
+         {
+  listeningData && listeningData.length > 0  &&
+     <>
+       <h1 className='text-[10pxl] font-bold text-center m-8'>Your Listening</h1>
+    {
+    listeningData.map((listening) => (
+  
+        
+       <div
+  key={listening._id}
+  className="flex justify-between items-center mt-4 border rounded-lg p-3"
+> <Link
+  to={`/listening/${listening._id}`}
+  className="flex items-center gap-4 flex-1"
+>
+  {/* Image */}
+  <img
+    src={listening.imageUrls?.[0]}
+    alt="Listening"
+    className="w-16 h-16 object-cover border rounded"
+  />
+
+  {/* Title */}
+  <p className="text-slate-600 font-bold hover:underline truncate">
+    {listening.name}
+  </p>
+</Link>
+
+
+  {/* Action Buttons */}
+  <div className="flex flex-col items-center">
+    <button 
+     onClick={()=>handleDelteListening(listening._id)}
+    className="uppercase m-2 text-red-600 hover:underline cursor-pointer">Delete</button>
+    <button onClick={handleUpdateListening} className="uppercase m-2 hover:underline cursor-pointer text-green-900">Edit</button>
+  </div>
+</div>
+      
+      
+
+    ))
+   } </>
+     }
+
+  </div>
+    
     </div>
   );
 }
