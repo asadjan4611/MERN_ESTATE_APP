@@ -189,7 +189,7 @@ if (data.success === false) {
   setLoadingsuccessfull(false);
   setUpdateSuccessfully(true);
 
-  navigate('/profile');
+  navigate(`/listening/${data._id}`);
   } catch (error) {
     setError(error.message);
     setUpdateSuccessfully(false);
@@ -222,7 +222,8 @@ if (data.success === false) {
                  onChange={handleChange}
                   value={formData.description}
                   minLength={10}
-                  maxLength={40} />
+                  // maxLength={40}
+                    />
            
            <input
                 className=' rounded-lg p-3 border'
@@ -232,7 +233,7 @@ if (data.success === false) {
                   value={formData.address}
                  placeholder='Address' 
                  required minLength={10}
-                  maxLength={80} />
+                  maxLength={180} />
            
               <div className='flex gap-x-9  gap-y-5 flex-wrap p-3'>
                 <div className='flex gap-2 flex-wrap'>

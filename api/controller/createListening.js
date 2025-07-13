@@ -1,5 +1,6 @@
 
 const listeningModel = require("../model/listeningModel");
+const usermodel = require("../model/usermodel");
 const { errorHandler } = require("../utilis/arrow");
 
 
@@ -102,4 +103,84 @@ const getListeningData =async (req,res,next) => {
 }
 
 
- module.exports ={deleteListening, createListening,updateListening,getListening,getListeningData }
+const getUser = async (req,res,next)=>{
+    console.log("Welcome at getUser function");
+    const user = req.params.id;
+    try {
+       if (!user) {
+        return  next(errorHandler(402,"User is not found"));
+    }
+    const data   = await usermodel.findById(user);
+     if (!data) {
+        return  next(errorHandler(402,"Data is not found"));
+    }
+    const {password: pass,...rest} = data._doc;
+    res.status(200).json(rest) 
+    } catch (error) {
+     next(errorHandler(500,"error is not found"));   
+    }
+    
+}
+
+
+
+const gettingListening = async (req,res,next)=>{
+    console.log("welcome at getListning functions")
+    try {
+         const limit = parseInt(req.query.limit) || 9;
+    const  startIndex = parseInt(req.query.startIndex) ||0;
+    let offer = req.query.offer;
+
+    if (offer === undefined|| offer === 'false') {
+        offer = {$in:[false,true]}
+    }
+   
+    let furnished = req.query.furnished;
+
+    if (furnished === undefined || furnished === 'false') {
+        furnished = {$in:[false,true]}
+    }
+
+     let parking = req.query.parking;
+
+    if (parking === undefined || parking === 'false') {
+        parking = {$in:[false,true]}
+    }
+    
+     let type = req.query.type;
+
+    if (type === undefined || type === 'false') {
+        type = {$in:['Sale',"Rent"]}
+    }
+     let searchTerm = req.query.searchTerm || '';
+     let sort = req.query.sort || 'createdAt';
+     let order = req.query.order || 'desc';
+     console.log({
+  offer,
+  furnished,
+  parking,
+  type,
+  searchTerm,
+});
+
+     const listeningsdata = await listeningModel.find({
+        name:{$regex:searchTerm,$options:"i"},
+        offer,
+        furnished,
+        parking,
+        type,
+        
+     }).sort({[sort]:order}).limit(limit).skip(startIndex);
+   //const listeningsdata = await listeningModel.find();
+    console.log("Matched listings:", listeningsdata.length);
+  console.log("Matched listings:", listeningsdata )
+     res.status(200).json(listeningsdata)
+    } catch (error) {
+       return next(errorHandler(500,error)); 
+    }
+     
+}
+
+
+
+ module.exports ={deleteListening, createListening,updateListening,getListening,getListeningData,gettingListening,getUser }
