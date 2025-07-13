@@ -6,6 +6,7 @@ import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import CreateListening from './pages/createListening';
+import UpdateListening from './pages/updateListening';
 import Header from './components/Header';
 import PrivateRoute from './components/privateRoute'; // Fixed import name
 
@@ -21,6 +22,7 @@ function App() {
               <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/createListening" element={<CreateListening />} />
+           <Route path="/update-Listening/:listeningId" element={<UpdateListening />} />
 
         </Route>
       </Routes>

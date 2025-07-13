@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react'
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {useDispatch} from 'react-redux'
-import {useNavigate} from 'react-router-dom'
-export default function () {
+import {useNavigate,useParams} from 'react-router-dom'
+export default function updateListening() {
 
   const [files ,setFiles] = useState([]);
   const [imageUploadError, setImageUploadError] = useState(false);
@@ -10,11 +11,13 @@ export default function () {
    const [loading, setLoading] = useState(false);
    const [loadingsuccessfull, setLoadingsuccessfull] = useState(false);
    const [error, setError] = useState(false);
+    const [updateSuccessfully,setUpdateSuccessfully] = useState(false);
    const dispatch = useDispatch();
    const navigate = useNavigate();
+   const params = useParams();
    const {currentUser} = useSelector((state)=>state.user);
   const [formData ,setFormData] = useState({
-    imageUrls :[],
+    imageUrl :[],
     name:"",
     address:"",
     description:"",
@@ -30,6 +33,33 @@ export default function () {
   });
   
  console.log(formData)
+
+ useEffect (
+  ()=>{
+  const fetching = async() =>{
+  console.log('hi1');
+  const listeningId = params.listeningId;
+  const res = await fetch(`http://localhost:3000/test/getListeningData/${listeningId}`);
+  console.log('hi3 is here');
+  const data =await res.json();
+  console.log(data.imageUrl);
+// if (!Array.isArray(data.imageUrls) && Array.isArray(data.imageUrl)) {
+//   data.imageUrls = data.imageUrl;
+// }
+
+  if (data.success === false) {
+    console.log(data.message);
+    return;
+  }
+  console.log('hi4');
+  
+  setFormData(data);
+  console.log(formData)
+  }
+  fetching();
+  },[]
+ );
+
   const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -43,7 +73,7 @@ const handleDeleteImage = (index) =>{
   setFormData({
 
   ...formData,
-  imageUrls:formData.imageUrls.filter((_,i)=> i !==index )
+  imageUrl:formData.imageUrl.filter((_,i)=> i !==index )
   })
 }
 
@@ -71,7 +101,7 @@ const handleImageSubmit = async (e) => {
 
     setFormData({
       ...formData,
-      imageUrls: formData.imageUrls.concat(promises),
+      imageUrls: formData.imageUrl.concat(promises),
     });
     setImageUploadError(false);
     setuploading(false);
@@ -115,11 +145,15 @@ const handleChange = (e) => {
 };
 
 const handleFromSubmitt =async (e) =>{
+console.log("everything is okay");
+    setUpdateSuccessfully(false);
   e.preventDefault();
   try {
-if (formData.imageUrls.length<1) {
+if (formData.imageUrl.length < 1) {
   return setError("you have choose at least one image");
 }
+console.log("everything is also now okay");
+
 
 if ( +formData.regularPrice< +formData.discountPrice) {
    return setError("Your Regular Price must be greater then Discount Price");
@@ -128,9 +162,12 @@ if ( +formData.regularPrice< +formData.discountPrice) {
   setLoading(true);
   setLoadingsuccessfull(true);
   setError(false);
+console.log("everything is okay before fetching");
+
     const res = await fetch(
-      'http://localhost:3000/test/createListening',{
-        method:"POST",
+       `http://localhost:3000/test/updateListening/${params.listeningId}`,{
+        method:"PUT",
+        credentials:"include",
           headers:{
             "Content-type":'application/json'
         },
@@ -141,24 +178,28 @@ if ( +formData.regularPrice< +formData.discountPrice) {
       }
     );
 const data =await res.json();
-
+console.log("everything is okay at data response");
 
 if (data.success === false) {
   //setError(data.message)
   setError(data.message);
+  setUpdateSuccessfully(false);
 }
   setLoading(false)
   setLoadingsuccessfull(false);
-  navigate(`/listening/${data._id}`);
+  setUpdateSuccessfully(true);
+
+  navigate('/profile');
   } catch (error) {
     setError(error.message);
+    setUpdateSuccessfully(false);
     setLoading(false);
   }
 }
 
   return (
     <main className='max-w-4xl mx-auto'>
-        <h1 className='text-[18px] text-center font-bold my-9'>Create a Listening</h1>
+        <h1 className='text-[18px] text-center font-bold my-9'>Update your Listening</h1>
         <form onSubmit={handleFromSubmitt}>
             <div className='flex  flex-wrap flex-col gap-4 max-w-lg mx-auto'>
                 <input
@@ -190,7 +231,8 @@ if (data.success === false) {
                 onChange={handleChange}
                   value={formData.address}
                  placeholder='Address' 
-                 required minLength={10} maxLength={80} />
+                 required minLength={10}
+                  maxLength={80} />
            
               <div className='flex gap-x-9  gap-y-5 flex-wrap p-3'>
                 <div className='flex gap-2 flex-wrap'>
@@ -332,22 +374,25 @@ if (data.success === false) {
             {imageUploadError && imageUploadError}
           </p>
           {
-            formData.imageUrls.length >0  && formData.imageUrls.map((url,index)=>(
+            formData.imageUrl.length >0  && formData.imageUrl.map((url,index)=>(
               <div key={url} className='flex justify-between p-3 border-none items-center'>
                 <img src={url}
                  alt="https://images.unsplash.com/photo-1751013781844-fa6a78089e49?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8"
-                 className='w-20 h-20 object-contain rounded-lg'
+                 className='w-30 h-20 object-cover rounded-lg'
               
                  />
-                 <button type='button' onClick={()=>handleDeleteImage(index)} className='text-red-600 uppercase border-none hover:opacity-75'>Delete</button>
+                 <button
+                  type='button'
+                   onClick={()=>handleDeleteImage(index)}
+                  className='text-red-600 uppercase border-none cursor-pointer hover:underline hover:opacity-75'>Delete</button>
               </div>
             ))
           }
                 </div>
           <button disabled={uploading || loading} className='p-3 bg-slate-600 text-white uppercase rounded-lg '>
-            {loading?"Loading...." :"Create Listening"}
+            {loading?"Updating...." :"Update Listening"}
             </button>
-             {loadingsuccessfull && <p className='text-red-600 uppercase'>Successfully Created</p>}
+             {loadingsuccessfull || updateSuccessfully  && <p className='text-green-600 text-center uppercase'>Updated Successfully</p>}
             {error && <p className='text-red-600 uppercase'>{error}</p>}
 
             </div>

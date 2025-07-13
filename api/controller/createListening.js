@@ -1,3 +1,4 @@
+
 const listeningModel = require("../model/listeningModel");
 const { errorHandler } = require("../utilis/arrow");
 
@@ -85,4 +86,20 @@ if (req.params.id === req.user.id) {
 
 }
 
- module.exports ={deleteListening, createListening,updateListening,getListening }
+const getListeningData =async (req,res,next) => {
+       
+     try {
+         const listening = await listeningModel.findById(req.params.id);
+    if (!listening) {
+        return next(errorHandler(400,'listening is not found'));
+    }
+    res.status(200).json(listening)
+ 
+     } catch (error) {
+         return next(errorHandler(400,error));
+     }
+   
+}
+
+
+ module.exports ={deleteListening, createListening,updateListening,getListening,getListeningData }

@@ -189,9 +189,7 @@ const handleDelteListening =async(e) =>{
   }
 }
 
- const handleUpdateListening = async (e) =>{
-  
- }
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -297,7 +295,10 @@ const handleDelteListening =async(e) =>{
     <button 
      onClick={()=>handleDelteListening(listening._id)}
     className="uppercase m-2 text-red-600 hover:underline cursor-pointer">Delete</button>
-    <button onClick={handleUpdateListening} className="uppercase m-2 hover:underline cursor-pointer text-green-900">Edit</button>
+    <Link  to={`/update-Listening/${listening._id}`}>
+    <button
+     className="uppercase m-2 hover:underline cursor-pointer text-green-900">Edit</button>
+     </Link>
   </div>
 </div>
       
