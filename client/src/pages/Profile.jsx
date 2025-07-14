@@ -29,8 +29,6 @@ export default function Profile() {
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [formData, setFormData] = useState({});
   const dispath =useDispatch();
-  console.log(formData);
-  console.log(listeningData.length);
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -50,7 +48,7 @@ export default function Profile() {
         try {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           // Here you would typically update the user's avatar in your database
-          console.log('File available at', downloadURL);
+         
         } catch (error) {
           console.error('Error getting download URL:', error);
         }
@@ -164,7 +162,6 @@ const handleshowListening = async () =>{
 }
 
 const handleDelteListening =async(e) =>{
-  console.log("hi")
   try {
     const res = await fetch(`http://localhost:3000/test/deleteListening/${e}`,
     {
@@ -175,7 +172,7 @@ const handleDelteListening =async(e) =>{
     }
     }
       );
-  console.log("hi 2")
+
       
       const data = await res.json();
       if (data.success === false) {

@@ -170,7 +170,7 @@ if (data.success === false) {
                   onChange={handleChange}
                   value={formData.name}
                 minLength={10}
-                 maxLength={20} />
+                 maxLength={30} />
            
            <input
                 className=' rounded-lg p-3 border'
@@ -181,7 +181,7 @@ if (data.success === false) {
                  onChange={handleChange}
                   value={formData.description}
                   minLength={10}
-                  maxLength={40} />
+                  maxLength={440} />
            
            <input
                 className=' rounded-lg p-3 border'
@@ -190,7 +190,7 @@ if (data.success === false) {
                 onChange={handleChange}
                   value={formData.address}
                  placeholder='Address' 
-                 required minLength={10} maxLength={80} />
+                 required minLength={10} maxLength={100} />
            
               <div className='flex gap-x-9  gap-y-5 flex-wrap p-3'>
                 <div className='flex gap-2 flex-wrap'>

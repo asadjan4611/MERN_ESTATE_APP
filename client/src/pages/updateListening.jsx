@@ -38,12 +38,9 @@ export default function updateListening() {
  useEffect (
   ()=>{
   const fetching = async() =>{
-  console.log('hi1');
   const listeningId = params.listeningId;
   const res = await fetch(`http://localhost:3000/test/getListeningData/${listeningId}`);
-  console.log('hi3 is here');
   const data =await res.json();
-  console.log(data.imageUrl);
 // if (!Array.isArray(data.imageUrls) && Array.isArray(data.imageUrl)) {
 //   data.imageUrls = data.imageUrl;
 // }
@@ -52,10 +49,9 @@ export default function updateListening() {
     console.log(data.message);
     return;
   }
-  console.log('hi4');
+ 
   
   setFormData(data);
-  console.log(formData)
   }
   fetching();
   },[]
@@ -149,14 +145,12 @@ const handleChange = (e) => {
 };
 
 const handleFromSubmitt =async (e) =>{
-console.log("everything is okay");
     setUpdateSuccessfully(false);
   e.preventDefault();
   try {
 if (formData.imageUrl.length < 1) {
   return setError("you have choose at least one image");
 }
-console.log("everything is also now okay");
 
 
 if ( +formData.regularPrice< +formData.discountPrice) {
@@ -166,8 +160,6 @@ if ( +formData.regularPrice< +formData.discountPrice) {
   setLoading(true);
   setLoadingsuccessfull(true);
   setError(false);
-console.log("everything is okay before fetching");
-
     const res = await fetch(
        `http://localhost:3000/test/updateListening/${params.listeningId}`,{
         method:"PUT",

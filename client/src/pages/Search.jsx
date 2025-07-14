@@ -8,8 +8,11 @@ export default function Search() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [showMore,setShowMore]  = useState(false);
   const [listings, setListings] = useState([]);
   console.log("your listening are here",listings);
+
+
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
     type: 'all',
@@ -34,6 +37,27 @@ export default function Search() {
       setSidebardata((prev) => ({ ...prev, sort, order }));
     }
   };
+  
+  const handleShowMore=async ()=>{
+    const numberOfListening = listings.length;
+    const startOfIndex = numberOfListening;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex",startOfIndex);
+    const searchQuerry = urlParams.toString();
+    const res = await fetch(
+          `http://localhost:3000/test/gettingListening?${searchQuerry}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+          }
+        );
+        const data = await res.json();
+        if (data.length <9) {
+          setShowMore(false)
+        }
+        setListings([...listings,...data]);
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -80,6 +104,7 @@ export default function Search() {
 
     const fetchListings = async () => {
       try {
+        setShowMore(false);
         setLoading(true);
         const str = urlParams.toString();
         console.log(str);
@@ -98,6 +123,11 @@ export default function Search() {
           setLoading(false)
         } else {
           setListings(data);
+          if (data.length >8) {
+            setShowMore(true);
+          }else{
+            setShowMore(false)
+          }
         
         }
         setLoading(false);
@@ -210,6 +240,16 @@ export default function Search() {
           {
             loading && (
               <p className='text-2xl text-center line-clamp-1'>Loading.....</p>
+            )
+          }
+          {
+            showMore && (
+              <button
+              onClick={()=>handleShowMore()}
+              className='cursor-pointer text-red-500 hover:underline uppercase'
+              >
+                Show more
+              </button>
             )
           }
         </div>
