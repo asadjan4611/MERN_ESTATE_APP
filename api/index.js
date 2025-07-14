@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 dotenv.config();
 const {getListeningRoute} = require('./routes/getListeningRoute');
 const app = express();
+console.log("Mongo URI:", process.env.MONGO_URI);
 
 mongoose.connect(process.env.MONGO).then(()=>{
     console.log("Successfull connected");

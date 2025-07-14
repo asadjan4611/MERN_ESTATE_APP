@@ -11,6 +11,7 @@ imageController.post('/upload', async (req, res) => {
     const savedImage = await ImageModel.create({ image });
     //savedImage.save();
     res.status(201).json({ message: 'Image uploaded', url: savedImage.image });
+    // console.log("Images is upload successfully on server",savedImage.image)
   } catch (error) {
     res.status(500).json({ message: 'Upload failed', error: error.message });
   }

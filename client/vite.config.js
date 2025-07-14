@@ -10,6 +10,10 @@ export default defineConfig({
       secure:false
     }
   },
-  plugins: [react(),  tailwindcss()],
+  plugins: [
+    react(),
+      ('@tailwindcss/line-clamp'),
+      tailwindcss()]
+      ,
     
 })

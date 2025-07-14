@@ -79,7 +79,7 @@ export default function Listening() {
                             {
                                 listening.imageUrl.map((url)=>(
                                     <SwiperSlide key={url}>
-                                        <div className="h-[350px] mx-12  object-cover"
+                                        <div className="h-[350px] mx-12 mt-4 object-cover"
                                         style={{
                                             background:`url(${url}) center no-repeat`,
                                             backgroundSize:"cover"

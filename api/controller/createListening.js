@@ -124,62 +124,61 @@ const getUser = async (req,res,next)=>{
 
 
 
-const gettingListening = async (req,res,next)=>{
-    console.log("welcome at getListning functions")
-    try {
-         const limit = parseInt(req.query.limit) || 9;
-    const  startIndex = parseInt(req.query.startIndex) ||0;
+const gettingListening = async (req, res, next) => {
+  console.log("welcome at getListning functions");
+
+  try {
+    const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+
     let offer = req.query.offer;
-
-    if (offer === undefined|| offer === 'false') {
-        offer = {$in:[false,true]}
+    if (offer === undefined || offer === 'false') {
+      offer = { $in: [false, true] };
+    } else {
+      offer = true;
     }
-   
+
     let furnished = req.query.furnished;
-
     if (furnished === undefined || furnished === 'false') {
-        furnished = {$in:[false,true]}
+      furnished = { $in: [false, true] };
+    } else {
+      furnished = true;
     }
 
-     let parking = req.query.parking;
-
+    let parking = req.query.parking;
     if (parking === undefined || parking === 'false') {
-        parking = {$in:[false,true]}
+      parking = { $in: [false, true] };
+    } else {
+      parking = true;
     }
-    
-     let type = req.query.type;
 
-    if (type === undefined || type === 'false') {
-        type = {$in:['Sale',"Rent"]}
+    let type = req.query.type;
+    if (!type || type === 'all') {
+      type = { $in: ['Sale', 'Rent'] };
     }
-     let searchTerm = req.query.searchTerm || '';
-     let sort = req.query.sort || 'createdAt';
-     let order = req.query.order || 'desc';
-     console.log({
-  offer,
-  furnished,
-  parking,
-  type,
-  searchTerm,
-});
 
-     const listeningsdata = await listeningModel.find({
-        name:{$regex:searchTerm,$options:"i"},
-        offer,
-        furnished,
-        parking,
-        type,
-        
-     }).sort({[sort]:order}).limit(limit).skip(startIndex);
-   //const listeningsdata = await listeningModel.find();
+    const searchTerm = req.query.searchTerm || '';
+    const sort = req.query.sort || 'createdAt';
+    const order = req.query.order === 'asc' ? 1 : -1;
+
+    const listeningsdata = await listeningModel.find({
+      name: { $regex: searchTerm, $options: 'i' },
+      offer,
+      furnished,
+      parking,
+      type,
+    })
+      .sort({ [sort]: order })
+      .limit(limit)
+      .skip(startIndex);
+
     console.log("Matched listings:", listeningsdata.length);
-  console.log("Matched listings:", listeningsdata )
-     res.status(200).json(listeningsdata)
-    } catch (error) {
-       return next(errorHandler(500,error)); 
-    }
-     
-}
+    res.status(200).json(listeningsdata);
+  } catch (error) {
+    return next(errorHandler(500, error));
+  }
+};
+
 
 
 

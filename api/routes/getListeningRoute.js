@@ -12,5 +12,5 @@ getListeningRoute.delete("/deleteListening/:id",verifyToken,deleteListening);
 getListeningRoute.put("/updateListening/:id",verifyToken,updateListening);
 getListeningRoute.get("/getListeningData/:id",getListeningData);
 getListeningRoute.get("/gettingListening",verifyToken,gettingListening);
- getListeningRoute.get("/:id",verifyToken,getUser);
+ getListeningRoute.get("/:id",getUser);
 module.exports ={ getListeningRoute }

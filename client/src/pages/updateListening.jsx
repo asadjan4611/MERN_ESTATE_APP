@@ -12,6 +12,7 @@ export default function updateListening() {
    const [loadingsuccessfull, setLoadingsuccessfull] = useState(false);
    const [error, setError] = useState(false);
     const [updateSuccessfully,setUpdateSuccessfully] = useState(false);
+    const [imageupdateSuccessfully,setImagesUpdateSuccessfully] = useState(false);
    const dispatch = useDispatch();
    const navigate = useNavigate();
    const params = useParams();
@@ -101,12 +102,15 @@ const handleImageSubmit = async (e) => {
 
     setFormData({
       ...formData,
-      imageUrls: formData.imageUrl.concat(promises),
+      imageUrl: formData.imageUrl.concat(promises),
     });
+    // setImagesUpdateSuccessfully()
     setImageUploadError(false);
     setuploading(false);
+    setImagesUpdateSuccessfully(true)
   } else {
     setuploading(false);
+    setImagesUpdateSuccessfully(false);
     setImageUploadError('You can only upload 6 images per listing');
   }
 } 
@@ -370,16 +374,21 @@ if (data.success === false) {
                 >
                 {uploading ? 'Uploading...' :'Upload'}
                 </button>
+
+                
+                </div>
+                <div className='text-green-600 font-semibold'>
+                  <p>{imageupdateSuccessfully? "Images Upload successfully" : "" }</p>
                 </div>
                  <p className='text-red-700 text-sm'>
             {imageUploadError && imageUploadError}
           </p>
           {
             formData.imageUrl.length >0  && formData.imageUrl.map((url,index)=>(
-              <div key={url} className='flex justify-between p-3 border-none items-center'>
+              <div key={url} className='flex justify-between  p-3 border-none items-center'>
                 <img src={url}
                  alt="https://images.unsplash.com/photo-1751013781844-fa6a78089e49?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8"
-                 className='w-30 h-20 object-cover rounded-lg'
+                 className='w-30 h-20  object-cover rounded-lg'
               
                  />
                  <button

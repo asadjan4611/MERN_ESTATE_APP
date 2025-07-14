@@ -251,6 +251,12 @@ const handleDelteListening =async(e) =>{
           {loading ?"Loading...." :"Update"}
         </button>
         </form>
+        <Link to={'/createListening'}>
+        <div 
+        className='bg-slate-700 text-center mt-2 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
+          Create a Listening
+        </div>
+        </Link>
         <div className='flex justify-between mt-1 text-red-600'>
           <span onClick={handleDelte} className='hover:underline mt-3 cursor-pointer'>Delete account</span>
           <span onClick={handleSignOut}  className='cursor-pointer mt-3'>Sign out</span>
