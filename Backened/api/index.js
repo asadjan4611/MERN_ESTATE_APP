@@ -9,6 +9,7 @@ const cors  = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const {getListeningRoute} = require('./routes/getListeningRoute');
+const { error } = require('console');
 
 const app = express();
 
@@ -16,6 +17,8 @@ dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(()=>{
     console.log("Successfull connected");
+}).catch((err)=>{
+  console.log("your error while connecting database is ",err);
 });
 
 app.use(cookieParser());
