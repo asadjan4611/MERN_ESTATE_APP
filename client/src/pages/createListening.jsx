@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+const baseUrl = import.meta.env.VITE_API_URL;
 export default function () {
 
   const [files ,setFiles] = useState([]);
@@ -60,7 +61,7 @@ const handleImageSubmit = async (e) => {
 
     for (let i = 0; i < files.length; i++) {
       const base64 = await fileToBase64(files[i]);
-      const res = await fetch('http://localhost:3000/image/upload', {
+      const res = await fetch(`${baseUrl}/image/upload`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64 }),
@@ -129,7 +130,7 @@ if ( +formData.regularPrice< +formData.discountPrice) {
   setLoadingsuccessfull(true);
   setError(false);
     const res = await fetch(
-      'http://localhost:3000/test/createListening',{
+      `${baseUrl}/test/createListening`,{
         method:"POST",
           headers:{
             "Content-type":'application/json'

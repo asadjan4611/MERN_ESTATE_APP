@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Your Firebase config
+const baseUrl = import.meta.env.VITE_API_URL;
 import {
   updateUserStart,
   updateUserSuccessfully,
@@ -61,7 +62,7 @@ export default function Profile() {
    e.preventDefault();
    try {
     dispath(updateUserStart());
-    const res =  await fetch(`http://localhost:3000/test/update/${currentUser._id}`,{
+    const res =  await fetch(`${baseUrl}/test/update/${currentUser._id}`,{
      method:"POST",
      credentials:"include",
       headers: {
@@ -99,7 +100,7 @@ export default function Profile() {
  const handleDelte  = async() =>{
   try {
     dispath(deleteUserStart());
-    const resp = await fetch(`http://localhost:3000/test/delete/${currentUser._id}`,
+    const resp = await fetch(`${baseUrl}/test/delete/${currentUser._id}`,
      {
       method:"DELETE"
      }
@@ -121,7 +122,7 @@ const handleSignOut = async (e) => {
   try {
     dispath(signOutUserStart()); // Corrected typo: dispath → dispatch
     
-    const res = await fetch('http://localhost:3000/auth/signout', {
+    const res = await fetch(`${baseUrl}/auth/signout`, {
       credentials: 'include' // Required for cookie clearance
     });
     
@@ -140,7 +141,7 @@ const handleSignOut = async (e) => {
 const handleshowListening = async () =>{
    try {
     setShowlisteningerror(null)
-    const res = await fetch(`http://localhost:3000/test/listening/${currentUser._id}`
+    const res = await fetch(`${baseUrl}/test/listening/${currentUser._id}`
       ,{
       method:"GET",
      credentials:"include",
@@ -164,7 +165,7 @@ const handleshowListening = async () =>{
 
 const handleDelteListening =async(e) =>{
   try {
-    const res = await fetch(`http://localhost:3000/test/deleteListening/${e}`,
+    const res = await fetch(`${baseUrl}/test/deleteListening/${e}`,
     {
     method:"DELETE",
     credentials:'include',

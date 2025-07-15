@@ -1,6 +1,6 @@
  const jwt = require('jsonwebtoken');
 
-const  {errorHandler} = require( '../utilis/arrow.js'); // Make sure you have this utility
+const  {errorHandler} = require( './arrow.js'); // Make sure you have this utility
 
  const verifyToken = (req, res, next) => {
   console.log('Cookies received:', req.cookies);

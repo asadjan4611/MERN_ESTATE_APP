@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ListenItem from '../components/ListenItem';
-
+const baseUrl = import.meta.env.VITE_API_URL;
 export default function Search() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,7 +45,7 @@ export default function Search() {
     urlParams.set("startIndex",startOfIndex);
     const searchQuerry = urlParams.toString();
     const res = await fetch(
-          `http://localhost:3000/test/gettingListening?${searchQuerry}`,
+          `${baseUrl}/test/gettingListening?${searchQuerry}`,
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -109,7 +109,7 @@ export default function Search() {
         const str = urlParams.toString();
         console.log(str);
         const res = await fetch(
-          `http://localhost:3000/test/gettingListening?${str}`,
+          `${baseUrl}/test/gettingListening?${str}`,
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },

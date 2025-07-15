@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom'
 import { useState,useEffect } from "react";
 import { Swiper,SwiperSlide } from "swiper/react";
 import  SwiperCore  from "swiper";
+const baseUrl = import.meta.env.VITE_API_URL;
 import { Navigation } from "swiper/modules";
 import {
   FaBath,
@@ -32,7 +33,7 @@ export default function Listening() {
      setError(false);       
      setLoading(true);    
      try {
-      const res = await fetch(`http://localhost:3000/test/getListeningData/${params.listeningId}`, {
+      const res = await fetch(`${baseUrl}/test/getListeningData/${params.listeningId}`, {
         method: "GET",
         credentials: "include",
         headers: {

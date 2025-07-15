@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
+const baseUrl = import.meta.env.VITE_API_URL;
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -23,7 +24,7 @@ export default function SignIn() {
       dispatch(signInStart());
       
       const res = await fetch(
-        'http://localhost:3000/auth/signin',
+        `${baseUrl}/auth/signin`,
         
         {
         method: 'POST',

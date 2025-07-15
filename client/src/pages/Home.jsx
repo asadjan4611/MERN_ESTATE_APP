@@ -7,7 +7,7 @@ import 'swiper/css/bundle'
 import ListingItem from '../components/ListenItem';
 import { list } from 'firebase/storage';
 
-
+const baseUrl = import.meta.env.VITE_API_URL;
 
 export default function Home() {
   const [offerListening,setOfferListening] = useState([]);
@@ -19,7 +19,7 @@ useEffect(()=>{
 
   const fetchOfferListening =async () =>{
      try {
-      const res = await fetch(`http://localhost:3000/test/gettingListening?offer=true&limit=4`,
+      const res = await fetch(`${baseUrl}/test/gettingListening?offer=true&limit=4`,
         {
           method:"GET",
           credentials:"include",
@@ -39,7 +39,7 @@ useEffect(()=>{
 
   const fetchRentListening =async () =>{
   try {
-    const res = await fetch(`http://localhost:3000/test/gettingListening?type=Rent&limit=4`,
+    const res = await fetch(`${baseUrl}/test/gettingListening?type=Rent&limit=4`,
         {
           method:"GET",
           credentials:"include",
@@ -58,7 +58,7 @@ useEffect(()=>{
 
   const fetchSaleListening =async () =>{
   try {
-    const res = await fetch(`http://localhost:3000/test/gettingListening?type=Sale&limit=4`,
+    const res = await fetch(`${baseUrl}/test/gettingListening?type=Sale&limit=4`,
         {
           method:"GET",
           credentials:"include",

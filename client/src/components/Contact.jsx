@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+const baseUrl = import.meta.env.VITE_API_URL;
 
 export default function Contact({ listening }) {
   const [landlord, setLandLord] = useState(null);
@@ -15,7 +16,7 @@ export default function Contact({ listening }) {
     const fetchingData = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/test/${listening.useRef}`,
+          `${baseUrl}/test/${listening.useRef}`,
           {
             method: "GET",
             credentials: "include",

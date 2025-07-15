@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {useDispatch} from 'react-redux'
 import {useNavigate,useParams} from 'react-router-dom'
+const baseUrl = import.meta.env.VITE_API_URL;
 export default function updateListening() {
 
   const [files ,setFiles] = useState([]);
@@ -39,7 +40,7 @@ export default function updateListening() {
   ()=>{
   const fetching = async() =>{
   const listeningId = params.listeningId;
-  const res = await fetch(`http://localhost:3000/test/getListeningData/${listeningId}`);
+  const res = await fetch(`${baseUrl}/test/getListeningData/${listeningId}`);
   const data =await res.json();
 // if (!Array.isArray(data.imageUrls) && Array.isArray(data.imageUrl)) {
 //   data.imageUrls = data.imageUrl;
@@ -87,7 +88,7 @@ const handleImageSubmit = async (e) => {
 
     for (let i = 0; i < files.length; i++) {
       const base64 = await fileToBase64(files[i]);
-      const res = await fetch('http://localhost:3000/image/upload', {
+      const res = await fetch(`${baseUrl}/image/upload`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64 }),
@@ -161,7 +162,7 @@ if ( +formData.regularPrice< +formData.discountPrice) {
   setLoadingsuccessfull(true);
   setError(false);
     const res = await fetch(
-       `http://localhost:3000/test/updateListening/${params.listeningId}`,{
+       `${baseUrl}/test/updateListening/${params.listeningId}`,{
         method:"PUT",
         credentials:"include",
           headers:{
