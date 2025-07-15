@@ -37,6 +37,8 @@ export default function OAuth() {
     }
   return (
     
-    <button type='button' onClick={onsubmitWithGoogle} className='p-3 rounded-lg text-white bg-red-700 uppercase hover:opacity-90'>Continue with google</button>
+    <button type='button'
+     onClick={onsubmitWithGoogle}
+     className='p-3 rounded-lg text-white bg-red-700 uppercase hover:opacity-90'>Continue with google</button>
   )
 }

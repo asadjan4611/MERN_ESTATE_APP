@@ -27,7 +27,8 @@ const jwt = require('jsonwebtoken');
             user: {
                 id: newUser._id,
                 username: newUser.username,
-                email: newUser.email
+                email: newUser.email,
+                avator:newUser.avatar
             }
         }); 
         } catch (error) {
@@ -72,7 +73,8 @@ const jwt = require('jsonwebtoken');
         user: {
           _id: user._id,
           email: user.email,
-          username:user.username
+          username:user.username,
+          avator:user.avatar
         },
       }
     );

@@ -20,6 +20,7 @@ import { useNavigate,Link } from 'react-router-dom';
 
 export default function Profile() {
   const { currentUser,loading,error } = useSelector((state) => state.user);
+  console.log("current user is ",currentUser);
   const fileRef = useRef(null);
   const navigate= useNavigate();
   const [file, setFile] = useState(null);
@@ -29,7 +30,7 @@ export default function Profile() {
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [formData, setFormData] = useState({});
   const dispath =useDispatch();
-
+  console.log("form data is ",formData);
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
@@ -200,10 +201,10 @@ const handleDelteListening =async(e) =>{
         />
 
         <div className='relative self-center'>
-          {currentUser?.avatar && (
+          {currentUser?.avator && (
             <img 
               onClick={() => fileRef.current.click()}
-              src={currentUser.avatar}
+              src={currentUser.avator}
               className='rounded-full h-24 w-24 object-cover cursor-pointer mt-1'
             />
           )}
@@ -281,7 +282,7 @@ const handleDelteListening =async(e) =>{
 >
   {/* Image */}
   <img
-    src={listening.imageUrls?.[0]}
+    src={listening.imageUrl?.[0]}
     alt="Listening"
     className="w-16 h-16 object-cover border rounded"
   />

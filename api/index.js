@@ -6,15 +6,18 @@ const  testrouter = require('./routes/user.routes');
 const  {createListeningRouter} = require('./routes/createListening');
 const  {imageController} = require('./controller/imageController');
 const cors  = require('cors');
+const path = require('path');
 const cookieParser = require('cookie-parser');
-dotenv.config();
 const {getListeningRoute} = require('./routes/getListeningRoute');
+
 const app = express();
-console.log("Mongo URI:", process.env.MONGO_URI);
+
+dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(()=>{
     console.log("Successfull connected");
 });
+
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -24,6 +27,7 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+//  const __dirname = path.resolve();
 
 
 app.use('/test',testrouter);
@@ -32,6 +36,10 @@ app.use('/test',getListeningRoute);
 app.use('/auth',authRouter)
 app.use('/image',imageController)
 
+app.use(express.static(path.join(__dirname,'/client/dist')));
+app.get("/{*any}",(req,res)=>{
+    res.sendFile(path.join(__dirname,'client','dist','index.html'))
+});
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
@@ -44,5 +52,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(3000,()=>{
-    console.log("server is running  on port on 3000");
+    console.log("Server is running  on port on 3000");
 })

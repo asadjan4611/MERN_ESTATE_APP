@@ -26,7 +26,7 @@ export default function Header() {
            <Link to = '/'>
         <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
             <span className='text-slate-500'>
-                Sahand
+                Asad
             </span>
              <span className='text-slate-700'>
                 Estate
@@ -54,7 +54,7 @@ export default function Header() {
             </Link>
              <Link to="/Profile">
              { currentUser ?(
-                <img className='rounded-full object-cover h-7' src={currentUser.avatar} alt="profile" />
+                <img className='rounded-full object-cover h-7' src={currentUser.avator} alt="profile" />
              ) :(
               <li className=' hover:underline'>Sign in</li>
              )

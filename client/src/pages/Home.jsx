@@ -5,6 +5,7 @@ import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import 'swiper/css/bundle'
 import ListingItem from '../components/ListenItem';
+import { list } from 'firebase/storage';
 
 
 
@@ -13,7 +14,7 @@ export default function Home() {
 const [saleListening,setSaleListening] = useState([]);
 const [rentListening,setRentListening] = useState([]);
 SwiperCore.use([Navigation]);
- console.log(saleListening);
+
 useEffect(()=>{
 
   const fetchOfferListening =async () =>{
@@ -38,7 +39,7 @@ useEffect(()=>{
 
   const fetchRentListening =async () =>{
   try {
-    const res = await fetch(`http://localhost:3000/test/gettingListening?type=rent&limit=4`,
+    const res = await fetch(`http://localhost:3000/test/gettingListening?type=Rent&limit=4`,
         {
           method:"GET",
           credentials:"include",
@@ -57,7 +58,7 @@ useEffect(()=>{
 
   const fetchSaleListening =async () =>{
   try {
-    const res = await fetch(`http://localhost:3000/test/gettingListening?type=sale&limit=4`,
+    const res = await fetch(`http://localhost:3000/test/gettingListening?type=Sale&limit=4`,
         {
           method:"GET",
           credentials:"include",
@@ -106,13 +107,18 @@ useEffect(()=>{
   {
     offerListening && offerListening.length>0 && (
       offerListening.map((listing)=>(
-        <SwiperSlide>
-        <div
-        className='h-[400px' key={listing._id}
-        style={{background:`url${listing.imageUrl[0]} center no-repeat`, backgroundSize:'cover'}}
+        <SwiperSlide key={listing._id}>
+          <img
+          src={Array.isArray(listing.imageUrl) ? listing.imageUrl[0] : listing.imageUrl}
+          alt="Listing"
+          className="h-[400px] w-full object-cover rounded-lg"
+        />
+        {/* <div
+        className='h-[400px]' key={listing._id}
+        style={{background:`url(${listing.imageUrl}) center no-repeat`, backgroundSize:'cover'}}
         >
 
-        </div>
+        </div> */}
         </SwiperSlide>
       ))
     )
